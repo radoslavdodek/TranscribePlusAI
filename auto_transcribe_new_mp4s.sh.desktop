@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=<YOUR_SCRIPT_PATH>/auto_transcribe_new_mp4s.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Transcribe videos automatically

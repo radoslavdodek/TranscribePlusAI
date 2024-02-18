@@ -1,0 +1,27 @@
+# -----------------------------------------------
+# AWS Transcribe related configuration parameters:
+# -----------------------------------------------
+
+s3Bucket: my-bucket-name
+s3BackupFolder: backup-folder-name
+awsProfile: default
+
+transcriptionLangCode: en-US
+
+transcriptionFileExtension: transcription
+outputFileExtension: output
+
+# ---------------------------------------
+# OpenAI related configuration parameters:
+# ---------------------------------------
+
+# OpenAI model to use for processing.
+# See https://platform.openai.com/docs/models
+openaiModel: gpt-4-turbo-preview
+
+# The input file's content will be split into chunks of this size (number of characters)
+# The script will call the OpenAI API separately for each chunk.
+maxChunkSize: 1000
+
+# "Prompt Template" file name
+promptTemplateFileName: PROMPT_TEMPLATE.txt

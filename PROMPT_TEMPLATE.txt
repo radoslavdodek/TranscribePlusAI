@@ -1,0 +1,8 @@
+Your task is to condense the meeting recording into a concise summary, using its transcription as a base.
+
+- Create a summary of the transcript.
+- Use bullet points to highlight key points or significant moments from the transcription. Include sub-bullets for additional details related to each main point.
+
+Here is the meeting transcription:
+
+```{INPUT_TEXT}```
