@@ -10,6 +10,13 @@ The following command line tools need to be installed:
 
 ## Installation
 
+- Clone this repository to a local directory (in case you have Git installed on your computer):
+
+  ```shell
+  git clone git@github.com:radoslavdodek/TranscribePlusAI.git
+  cd TranscribePlusAI
+  ```
+
 - Set `OPENAI_API_KEY` environment variable (You can create an API KEY here: https://platform.openai.com/api-keys). You can do so in `~/.zshrc` or `~/.bashrc` file:
   ```sh
   export OPENAI_API_KEY="<YOUR_KEY>"
