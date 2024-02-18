@@ -3,6 +3,7 @@
 ## Prerequisites
 
 The following command line tools need to be installed:
+- git (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - aws (https://aws.amazon.com/cli)
 - jq (https://jqlang.github.io/jq)
 - ffmpeg (https://ffmpeg.org)
@@ -10,7 +11,7 @@ The following command line tools need to be installed:
 
 ## Installation
 
-- Clone this repository to a local directory (in case you have Git installed on your computer):
+- Clone this repository to a local directory:
 
   ```shell
   git clone git@github.com:radoslavdodek/TranscribePlusAI.git
