@@ -3,10 +3,8 @@
 ## Prerequisites
 
 The following command line tools need to be installed:
+
 - git (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- aws (https://aws.amazon.com/cli)
-- jq (https://jqlang.github.io/jq)
-- ffmpeg (https://ffmpeg.org)
 - Python 3 (https://www.python.org)
 
 ## Installation
@@ -18,13 +16,14 @@ The following command line tools need to be installed:
   cd TranscribePlusAI
   ```
 
-- Set `OPENAI_API_KEY` environment variable (You can create an API KEY here: https://platform.openai.com/api-keys). You can do so in `~/.zshrc` or `~/.bashrc` file:
+- Set `OPENAI_API_KEY` environment variable (You can create an API KEY here: https://platform.openai.com/api-keys). You
+  can do so in `~/.zshrc` or `~/.bashrc` file:
   ```sh
   export OPENAI_API_KEY="<YOUR_KEY>"
   ```
-- Install python packages:
+- Install python virtual environment and required python packages:
   ```sh
-  pip3 install -r requirements.txt
+  ./setup.sh
   ```
 
 ## Usage
@@ -32,28 +31,22 @@ The following command line tools need to be installed:
 Here's how to use the command on mp3 or mp4 files:
 
 ```shell
-./transcribe.sh "<YOUR_FILE_PATH>"
+./transcribe_plus_ai.sh "<YOUR_FILE_PATH>"
 ```
 
-If you're working with mp4 file, the command will first convert it to mp3 file. 
-Then, it will use the AWS Transcribe API to create a transcription of the audio. 
+If you're working with mp4 file, the command will first convert it to mp3 file.
+Then, it will use the AWS Transcribe API to create a transcription of the audio.
 This transcription will be stored in a file named `<YOUR_FILE_PATH>.transcription`
 (the file extension can be configured in `CONFIG.yaml` file).
 
-After the transcription is created, a Python script will run to further process this content. 
+After the transcription is created, a Python script will run to further process this content.
 It will use the prompt specified in the `PROMPT_TEMPLATE.txt` file.
 The results of this process will be saved in a file named `<YOUR_FILE_PATH>.output`
 (the file extension can be configured in `CONFIG.yaml` file).
 
-If you wish to only run the Python script independently, you can do so with the following command:
-
-```shell
-python3 process_by_openai.py "<INPUT_TEXT_FILE_PATH>" "<OUTPUT_FILE_PATH>"
-```
-
 ### Watch for new mp4 files in the directory
 
-If you would like to automatically call this script when a new mp4 file is added to a specific directory, 
+If you would like to automatically call this script when a new mp4 file is added to a specific directory,
 you can configure it as follows (valid for Ubuntu):
 
 - Create new file called `auto_transcribe_new_mp4s.sh`:
@@ -71,7 +64,7 @@ inotifywait --include 'mp4' -m "${DIRECTORY_TO_WATCH}" -e moved_to --format '%w%
     done
 ```
 
-Note: don't forget to specify `DIRECTORY_TO_WATCH` and `TRANSCRIBE_SCRIPT` in the above script. 
+Note: don't forget to specify `DIRECTORY_TO_WATCH` and `TRANSCRIBE_SCRIPT` in the above script.
 
 We need to start this file at the startup:
 Create new file: `~/.config/autostart/auto_transcribe_new_mp4s.sh.desktop`
