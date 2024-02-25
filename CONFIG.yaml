@@ -5,6 +5,7 @@
 s3Bucket: my-bucket-name
 s3BackupFolder: backup-folder-name
 awsProfile: default
+awsRegion: eu-central-1
 
 transcriptionLangCode: en-US
 
