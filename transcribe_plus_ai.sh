@@ -17,8 +17,11 @@ then
 	exit 1
 fi
 
+SCRIPT_PATH="$(realpath "$0")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+
 # Activate virtual environment
-source venv/bin/activate
+source "${SCRIPT_DIR}/venv/bin/activate"
 
 # Run Python script with all arguments passed to this script
-python transcribe_plus_ai.py "$@"
+python "${SCRIPT_DIR}/transcribe_plus_ai.py" "$@"
