@@ -2,15 +2,16 @@
 
 ## Prerequisites
 
-The following command line tools need to be installed:
+The tools listed below need to be installed:
 
 - git (https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - Python 3 (https://www.python.org)
 
 ## Installation
 
-- Set `OPENAI_API_KEY` environment variable (You can create an API KEY here: https://platform.openai.com/api-keys). You
-  can do so in `~/.zshrc` or `~/.bashrc` file:
+- Set `OPENAI_API_KEY` environment variable (You can create an API KEY here: https://platform.openai.com/api-keys). 
+
+  You can do so in `~/.zshrc` or `~/.bashrc` file:
   ```sh
   export OPENAI_API_KEY="<YOUR_KEY>"
   ```
@@ -40,8 +41,8 @@ Then, it will use the AWS Transcribe API to create a transcription of the audio.
 This transcription will be stored in a file named `<YOUR_FILE_PATH>.transcription`
 (the file extension can be configured in `CONFIG.yaml` file).
 
-After the transcription is created, a Python script will run to further process this content.
-It will use the prompt specified in the `PROMPT_TEMPLATE.txt` file.
+Once the transcription has been created, the script will process it using the OpenAI API, 
+using the prompt specified in the `PROMPT_TEMPLATE.txt` file.
 The results of this process will be saved in a file named `<YOUR_FILE_PATH>.output`
 (the file extension can be configured in `CONFIG.yaml` file).
 
