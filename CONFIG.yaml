@@ -18,7 +18,7 @@ outputFileExtension: output
 
 # OpenAI model to use for processing.
 # See https://platform.openai.com/docs/models
-openaiModel: gpt-4-turbo-preview
+openaiModel: gpt-4-turbo
 
 # The input file's content will be split into chunks of this size (number of characters)
 # The script will call the OpenAI API separately for each chunk.
