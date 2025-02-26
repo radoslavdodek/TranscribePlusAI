@@ -26,3 +26,9 @@ maxChunkSize: 1000
 
 # "Prompt Template" file name
 promptTemplateFileName: PROMPT_TEMPLATE.txt
+
+# ---------------------------------------
+# Assembly AI related configuratiton
+# ---------------------------------------
+
+aaiApiKey: REPLACE_WITH_THE_ACTUAL_API_KEY

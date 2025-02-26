@@ -2,13 +2,10 @@ import mimetypes
 import os
 import shutil
 import sys
-import time
-import uuid
 
+import assemblyai as aai
 import boto3
-import requests
 import yaml
-from botocore.exceptions import NoCredentialsError
 from moviepy.editor import VideoFileClip
 from openai import OpenAI
 
@@ -42,6 +39,7 @@ OUTPUT_FILE_EXTENSION = config['outputFileExtension']
 OPENAI_MODEL = config.get('openaiModel')
 MAX_CHUNK_SIZE = config.get('maxChunkSize')
 PROMPT_TEMPLATE_FILE_NAME = config.get('promptTemplateFileName')
+AAI_API_KEY = config.get('aaiApiKey')
 
 # AWS clients
 session = boto3.Session(profile_name=AWS_PROFILE, region_name=AWS_REGION)
@@ -49,56 +47,23 @@ s3_client = session.client('s3')
 transcribe_client = session.client('transcribe')
 
 
-def transcribe_audio(file, original_file, file_format):
-    # Upload file to AWS S3
-    print('Upload file to S3...')
-    try:
-        s3_client.upload_file(file, S3_BUCKET, f'audio.{file_format}', ExtraArgs={'StorageClass': 'REDUCED_REDUNDANCY'})
-    except NoCredentialsError:
-        print('AWS S3 upload failed')
+def transcribe_audio(file, original_file):
+
+    # Use Assembly AI to transcribe the audio
+    aai.settings.api_key = AAI_API_KEY
+    transcriber = aai.Transcriber()
+    transcript = transcriber.transcribe(file)
+
+    if transcript.status == aai.TranscriptStatus.error:
+        print(transcript.error)
+        print('Transcription failed.')
         sys.exit(1)
+    else:
+        print(f"\n\nTranscription for '{original_file}':\n{transcript.text}\n")
 
-    # Call AWS Transcribe service
-    job_name = f"job-{time.strftime('%Y-%m-%d')}-{uuid.uuid4()}"
-    print(f"Working on transcription ({job_name})...", end='', flush=True)
-    try:
-        transcribe_client.start_transcription_job(
-            TranscriptionJobName=job_name,
-            LanguageCode=TRANSCRIPTION_LANG_CODE,
-            MediaFormat=file_format,
-            Media={'MediaFileUri': f'https://{S3_BUCKET}.s3.amazonaws.com/audio.{file_format}'}
-        )
-        print('Transcription job started.')
-    except Exception as e:
-        print(f'\nAWS Transcribe call failed: {e}')
-        sys.exit(1)
-
-    # Check the result
-    status = "IN_PROGRESS"
-    while status != "COMPLETED":
-        time.sleep(3)
-        res = transcribe_client.get_transcription_job(TranscriptionJobName=job_name)
-        status = res['TranscriptionJob']['TranscriptionJobStatus']
-
-        if status == "COMPLETED":
-            transcription_url = res['TranscriptionJob']['Transcript']['TranscriptFileUri']
-            transcription_response = requests.get(transcription_url)
-            transcription = transcription_response.json().get('results', {}).get('transcripts', [])[0].get('transcript',
-                                                                                                           '')
-
-            print(f"\n\nTranscription for '{original_file}':\n{transcription}\n")
-
-            with open('/tmp/transcription.txt', 'w') as f:
-                f.write(transcription)
-            shutil.copy('/tmp/transcription.txt', f"{original_file}.{TRANSCRIPTION_FILE_EXTENSION}")
-
-            print('Remove file from S3...')
-            s3_client.delete_object(Bucket=S3_BUCKET, Key=f'audio.{file_format}')
-            return
-        else:
-            print('.', end='', flush=True)
-    print('Transcription failed.')
-    sys.exit(1)
+        with open('/tmp/transcription.txt', 'w') as f:
+            f.write(transcript.text)
+        shutil.copy('/tmp/transcription.txt', f"{original_file}.{TRANSCRIPTION_FILE_EXTENSION}")
 
 
 def get_file_format(file):
@@ -232,7 +197,7 @@ def main():
 
     transcription_file = f"{original_file}.{TRANSCRIPTION_FILE_EXTENSION}"
     if not os.path.isfile(transcription_file):
-        transcribe_audio(file, original_file, file_format)
+        transcribe_audio(file, original_file)
         print('Transcription done')
     else:
         print('Transcription file found:', transcription_file)
